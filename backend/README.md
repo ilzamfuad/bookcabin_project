@@ -51,9 +51,9 @@
 
 - To generate mocks for a service, use the following command:
   ```bash
-  mockgen -source=service/article_service.go -destination=tests/mock/service/article_service.go
+  mockgen -source=service/voucher_service.go -destination=tests/mock/service/voucher_service.go
   ```
-- Replace `service/article_service.go` with the path to the file you want to mock.
+- Replace `service/voucher_service.go` with the path to the file you want to mock.
 
 ## Unit Test
 
