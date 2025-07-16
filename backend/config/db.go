@@ -11,14 +11,13 @@ import (
 )
 
 const (
-	SqliteDbPath = "./backend/db/voucher.db"
+	SqliteDbPath = "./db/vouchers.db"
 )
 
 var DB *gorm.DB
 
 func InitSQLiteDB() *gorm.DB {
-	dbPath := "test.db"
-	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open(SqliteDbPath), &gorm.Config{})
 
 	if err != nil {
 		fmt.Println("Cannot connect to SQLite database")

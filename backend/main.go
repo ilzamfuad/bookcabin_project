@@ -7,7 +7,10 @@ import (
 	"bookcabin_project/service"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
+
+	"github.com/rs/cors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -21,11 +24,13 @@ func main() {
 	router := gin.Default()
 
 	db := config.InitSQLiteDB()
-	if sqlDB, err := db.DB(); err != nil {
-		panic(err)
-	} else {
-		_ = sqlDB.Close()
-	}
+	defer func() {
+		if sqlDB, err := db.DB(); err != nil {
+			panic(err)
+		} else {
+			_ = sqlDB.Close()
+		}
+	}()
 
 	voucherRepo := repository.NewVoucherRepository(db)
 	voucherService := service.NewVoucherService(voucherRepo)
@@ -44,7 +49,14 @@ func main() {
 	router.POST("/api/check", voucherController.Check)
 	router.POST("/api/generate", voucherController.Generate)
 
+	handler := cors.New(cors.Options{
+		AllowedOrigins: []string{"http://localhost:5173"},
+		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
+		AllowedHeaders: []string{"Content-Type"},
+	}).Handler(router)
+
 	server := fmt.Sprintf(":%s", os.Getenv("PORT"))
-	router.Run(server)
+	fmt.Println("Server is running on port", server)
+	http.ListenAndServe(server, handler)
 
 }

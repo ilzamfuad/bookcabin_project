@@ -69,7 +69,7 @@ func (ac *VoucherController) Generate(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "registration success"})
+	c.JSON(http.StatusOK, gin.H{"success": "true", "seats": seats})
 }
 
 type CheckInput struct {
